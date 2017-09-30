@@ -13,11 +13,11 @@ struct Node {
 	int midTerm1Grade;
 	int midTerm2Grade;
 	int finalExamGrade;
-	int finalGrade;
 	struct Node *next;
 };
 
 struct List {
+	int length;
 	struct Node *head;
 	struct Node *tail;
 };
@@ -45,6 +45,7 @@ void SLL_push(struct List *list, struct Node *node) {
 		list->tail = node;
 	}
 	list->head = node;
+	list->length = list->length + 1;
 }
 
 void SLL_append(struct List *list, struct Node *node) {
@@ -59,20 +60,24 @@ void SLL_append(struct List *list, struct Node *node) {
 	}
 }
 
-// struct node *getNodeByStudentId(struct List *list, int studentId) {
+struct Node *getNodeByStudentId(struct List *list, int studentId) {
+	struct Node *node;
+	node = list->head;
 
-// }
+	if(node->studentId == studentId) return node;
 
-void setGrade(struct List *list, int studentId, int type) {
-	if(type == 0) {
-		//set mid term 1
-	} else if (type == 1) {
-		//set mid term 2
-	} else if (type == 2) {
-		//set final grade
+	for(int i = 0; i < list->length; i++){
+		node = node->next;
+		if(node->studentId == studentId) return node;
 	}
+
+	return NULL;
+
 }
 
+int getAverage(struct Node *node) {
+	return 0;
+}
 
 int main(int argc, char *argv[]) {	
 	if(argc == 5){
@@ -82,6 +87,8 @@ int main(int argc, char *argv[]) {
 		struct Node *node;
 		int grade;
 		char *search = ",";
+		struct List list = SLL_new();
+		list.length = 0;
 		for(int i = 1; i < argc; i++) {
 			if(i == (argc-1)) {
 				printf("%s\n", "WRITE THE THINGS");
@@ -96,18 +103,21 @@ int main(int argc, char *argv[]) {
 	// node->item = item;
 					printf("%i ", studentId );
 					printf("%i\n", grade);
+
+					if(i == 1) {
+						node = malloc(sizeof(struct Node));
+						node->studentId = studentId;
+						node->midTerm1Grade = grade;
+						SLL_push(&list, node);
+					} 
+					else if(i == 2) {
+						node = getNodeByStudentId(&list, studentId);
+						node->midTerm2Grade = grade;
+					} else if (i == 3) {
+						node = getNodeByStudentId(&list, studentId);
+						node->finalExamGrade = grade;
+					}
 				}
-
-				if(i == 1) {
-					node = malloc(sizeof(struct Node));
-					node->studentId = studentId;
-				} else {
-					node = getNodeByStudentId(studentId);
-				}
-
-
-
-				struct List list = SLL_new();
 
 				fclose(fp);
 			}
